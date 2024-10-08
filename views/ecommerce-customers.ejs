@@ -1,0 +1,262 @@
+<%- contentFor('extra_css') %>
+<link href="/libs/simple-datatables/style.css" rel="stylesheet" type="text/css" />
+
+<%- contentFor('content') %>
+<div class="container-xxl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">Customers</h4>
+                        </div><!--end col-->
+                        <div class="col-auto">
+                            <form class="row g-2">
+                                <div class="col-auto">
+                                    <a class="btn bg-primary-subtle text-primary dropdown-toggle d-flex align-items-center arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false" data-bs-auto-close="outside">
+                                        <i class="iconoir-filter-alt me-1"></i> Filter
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-start">
+                                        <div class="p-2">
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-all">
+                                                <label class="form-check-label" for="filter-all">
+                                                  All
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-one">
+                                                <label class="form-check-label" for="filter-one">
+                                                    New
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-two">
+                                                <label class="form-check-label" for="filter-two">
+                                                    VIP
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-three">
+                                                <label class="form-check-label" for="filter-three">
+                                                    Repeat
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-four">
+                                                <label class="form-check-label" for="filter-four">
+                                                    Referral
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-five">
+                                                <label class="form-check-label" for="filter-five">
+                                                    Inactive
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-six">
+                                                <label class="form-check-label" for="filter-six">
+                                                    Loyal
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-danger" id="deleteSelectedCustomers">
+                                        <i class="fa-solid fa-trash me-1"></i> Delete Selected
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+                                        <i class="fa-solid fa-plus me-1"></i> Add Customer
+                                    </button>                                </div><!--end col-->
+                            </form>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end card-header-->
+                <div class="card-body pt-0">
+
+                    <div class="table-responsive">
+                        <table class="table mb-0 checkbox-all text-nowrap" id="datatable_1">
+                            <thead class="table-light">
+                              <tr>
+                                <th style="width: 16px;">
+                                    <div class="form-check mb-0 ms-n1">
+                                        <input type="checkbox" class="form-check-input" name="select-all" id="select-all">
+                                    </div>
+                                </th>
+
+                                <th class="ps-0">Customer</th>
+                                <th>Email</th>
+                                <th>Order</th>
+                                <th>Spent</th>
+
+                              </tr>
+                            </thead>
+                            <tbody>
+                            <% if (customers.length) { %>
+                                <% customers.forEach(customer => { %>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check mb-0 ms-n1">
+                                                <input type="checkbox" class="form-check-input" name="select-customer" value="<%= customer.id %>">
+                                            </div>
+                                        </td>
+                                        <td><%= customer.name %></td>
+                                        <td><%= customer.email %></td>
+                                        <td><%= customer.orderCount %></td>
+                                        <td><%= Number(customer.totalSpent).toFixed(2)  %> DH</td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="text-center">No customers found.</td>
+                                </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div><!-- container -->
+<!-- modal for create new customer -->
+<div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog"
+     aria-labelledby="addCustomerModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title m-0" id="addCustomerModalTitle">Add New Customer</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div><!--end modal-header-->
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <label for="customer_name" class="col-sm-3 col-form-label text-lg-end">Name: </label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" id="customer_name" placeholder="Enter customer name">
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label for="customer_email" class="col-sm-3 col-form-label text-lg-end">Email: </label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control" id="customer_email" placeholder="Enter customer email">
+                    </div>
+                </div>
+
+            </div><!--end modal-body-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="saveCustomer()">Save</button>
+            </div><!--end modal-footer-->
+        </div><!--end modal-content-->
+    </div><!--end modal-dialog-->
+</div>
+
+<%- contentFor('extra_javascript') %>
+<script src="/libs/simple-datatables/umd/simple-datatables.js"></script>
+<script src="/js/pages/datatable.init.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function saveCustomer() {
+        const customerName = document.getElementById('customer_name').value;
+        const customerEmail = document.getElementById('customer_email').value;
+
+
+        // Validate inputs
+        if (!customerName || !customerEmail) {
+            alert('Please fill all fields correctly.');
+            return;
+        }
+
+        const customerData = {
+            name: customerName,
+            email: customerEmail,
+        };
+
+        // Send data to the server
+        fetch('/api/add-customer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(customerData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert('Customer added successfully!');
+                    $('#addCustomerModal').modal('hide');
+                    window.location.reload(); // Reload the page to refresh the table
+                }
+            })
+            .catch((error) => {
+                console.error('Error adding customer:', error);
+            });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const customerTable = document.querySelector('#datatable_1');
+        if (customerTable) {
+            new simpleDatatables.DataTable(customerTable);
+        }
+        // "Select All" checkbox functionality
+        const selectAllCheckbox = document.querySelector('#select-all');
+        const customerCheckboxes = document.querySelectorAll('input[name="select-customer"]');
+
+        selectAllCheckbox.addEventListener('change', function () {
+            customerCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+
+        // When an individual checkbox is changed, check/uncheck the "Select All" checkbox accordingly
+        customerCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                if (!checkbox.checked) {
+                    selectAllCheckbox.checked = false;
+                } else if ([...customerCheckboxes].every(c => c.checked)) {
+                    selectAllCheckbox.checked = true;
+                }
+            });
+        });
+    });
+
+
+    document.querySelector('#deleteSelectedCustomers').addEventListener('click', function () {
+        const selectedIds = [...document.querySelectorAll('input[name="select-customer"]:checked')].map(checkbox => checkbox.value);
+
+        if (selectedIds.length === 0) {
+            alert('Please select at least one customer to delete.');
+            return;
+        }
+
+        if (confirm('Are you sure you want to delete the selected customers?')) {
+            fetch('/api/delete-customers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: selectedIds })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        alert('Selected customers deleted successfully!');
+                        window.location.reload(); // Reload the page to refresh the table
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error deleting customers:', error);
+                });
+        }
+    });
+
+</script>

@@ -1,0 +1,141 @@
+<%- contentFor('extra_css') %>
+
+<%- contentFor('content') %>
+<div class="container-xxl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body bg-black">
+                    <!-- Order Header Details -->
+                    <div class="row">
+                        <div class="col-4 align-self-center">
+                            <img src="/images/logo-sm.png" alt="logo-small" class="logo-sm me-1" height="70" >
+                        </div>
+                        <div class="col-8 text-end align-self-center">
+                            <h5 class="mb-1 fw-semibold text-white"><span class="text-muted">Invoice:</span> #<%= String(order.id).padStart(6, '0') %></h5>
+                            <h5 class="mb-0 fw-semibold text-white"><span class="text-muted">Issue Date:</span> <%= new Date(order.order_date).toLocaleDateString() %></h5>
+                        </div>
+                    </div>
+                </div><!--end card-body-->
+                <div class="card-body">
+                    <div class="row row-cols-3 d-flex justify-content-md-between">
+                        <div class="col-md-3 d-print-flex align-self-center">
+                            <div class="">
+                                <span class="badge rounded text-dark bg-light">Invoice to</span>
+                                <h5 class="my-1 fw-semibold fs-18"><%= order.customer_name %></h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Items Table -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive project-invoice">
+                                <table class="table table-bordered mb-0">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% let grandTotal = 0; %>
+                                    <% items.forEach(item => { %>
+                                        <tr>
+                                            <td><%= item.product_name %></td>
+                                            <td>$<%= Number(item.price).toFixed(2) %></td>
+                                            <td><%= item.quantity %></td>
+                                            <td>$<%= (item.price * item.quantity).toFixed(2) %></td>
+                                            <% grandTotal += item.price * item.quantity; %>
+                                        </tr>
+                                    <% }) %>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th colspan="3" class="text-end">Total:</th>
+                                        <th>$<%= grandTotal.toFixed(2) %></th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h5 class="mt-4">Terms And Condition :</h5>
+                            <ul class="ps-3">
+                                <li><small class="fs-12">By purchasing from Jawaher Store, you agree to our policies on payment, shipping, and returns </small></li>
+
+                            </ul>
+                        </div>
+                        <div class="col-lg-6 align-self-center">
+                            <div class="float-none float-md-end" style="width: 30%;">
+                                <small>Account Manager</small>
+                                <img src="/images/extra/signature.png" alt="" class="mt-2 mb-1" height="24">
+                                <p class="border-top">Signature</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-lg-12 col-xl-4 ms-auto align-self-center">
+                            <div class="text-center"><small class="fs-12">Thank you very much for doing business with us.</small></div>
+                        </div>
+                        <div class="col-lg-12 col-xl-4">
+                            <div class="float-end d-print-none mt-2 mt-md-0">
+                                <a href="javascript:window.print()" class="btn btn-info">Print</a>
+                                <a href="#" class="btn btn-primary" onclick="completeOrder('<%= order.id %>')">Complete</a>
+                                <a href="#" class="btn btn-danger" onclick="cancelOrder('<%= order.id %>')" >Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div>
+
+<%- contentFor('extra_javascript') %>
+<script>
+    function updateOrderStatus(orderId, status) {
+        // Confirm action
+        const action = status === 'completed' ? 'complete' : 'cancel';
+        if (!confirm(`Are you sure you want to ${action} this order?`)) return;
+
+        // Make an API request to update the order status
+        fetch(`/api/update-order-status/${orderId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(`Error: ${data.error}`);
+                } else {
+                    alert(`Order ${action}d successfully.`);
+                    window.location.reload(); // Refresh the page to reflect the status change
+                }
+            })
+            .catch(err => {
+                console.error(`Error updating order status to ${status}:`, err);
+                alert('An error occurred while updating the order status.');
+            });
+    }
+
+    // Function for the "Cancel" button
+    function cancelOrder(orderId) {
+        updateOrderStatus(orderId, 'canceled');
+    }
+
+    // Function for the "Complete" button
+    function completeOrder(orderId) {
+        updateOrderStatus(orderId, 'completed');
+    }
+</script>

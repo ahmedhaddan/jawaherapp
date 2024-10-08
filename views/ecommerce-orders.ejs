@@ -1,0 +1,283 @@
+<%- contentFor('extra_css') %>
+
+<%- contentFor('content') %>
+
+<div class="container-xxl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">Orders</h4>
+                        </div><!--end col-->
+                        <div class="col-auto">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOrderModal"><i class="fas fa-plus me-1"></i> Add Order</button>
+                            <!-- Delete Order Button -->+
+                            <button class="btn btn-danger" onclick="deleteSelectedOrders()"><i class="fas fa-trash me-1"></i> Delete Selected</button>
+
+                        </div><!--end col-->
+                    </div>  <!--end row-->
+                </div><!--end card-header-->
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th><input type="checkbox" id="select-all-checkbox"></th>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% if (orders && orders.length > 0) { %>
+                                <% orders.forEach(order => { %>
+                                    <tr>
+                                        <!-- Format order ID with leading zeros and a '#' -->
+                                        <td><input type="checkbox" class="order-checkbox" value="<%= order.id %>"></td>
+                                        <td><a href="/order-details/<%= order.id %>"><span style="color: #28a745;">#<%= String(order.id).padStart(6, '0') %></span></a></td>
+                                        <td><%= order.customer_name %></td>
+                                        <td><%= new Date(order.order_date).toLocaleDateString() %></td>
+                                        <td><%= order.payment_method %></td>
+                                        <td>
+                                            <% if (order.status === 'completed') { %>
+                                                <span class="badge bg-success">Completed</span>
+                                            <% } else if (order.status === 'pending') { %>
+                                                <span class="badge bg-warning">Pending</span>
+                                            <% } else if (order.status === 'canceled') { %>
+                                                <span class="badge bg-danger">Canceled</span>
+                                            <% } %>
+                                        </td>
+                                        <td>$<%= Number(order.total_price).toFixed(2) %></td>
+                                        <td><%= new Date(order.order_date).toLocaleDateString() %></td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="7" class="text-center">No orders found.</td>
+                                </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div><!-- container -->
+
+<!-- Modal for adding a new order -->
+<div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="addOrderModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addOrderModalTitle">Add New Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <label for="order_customer" class="col-sm-3 col-form-label text-lg-end">Customer: </label>
+                    <div class="col-sm-9">
+                        <select id="order_customer" class="form-select">
+                            <% customers.forEach(customer => { %>
+                                <option value="<%= customer.id %>"><%= customer.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Additional fields for payment method, status, etc. -->
+<!--                <div class="input-group mb-3">-->
+<!--                    <label for="order_payment" class="col-sm-3 col-form-label text-lg-end">Payment: </label>-->
+<!--                    <div class="col-sm-9">-->
+<!--                        <input type="text" class="form-control" id="order_payment" placeholder="Enter payment method">-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="input-group mb-3">
+                    <label for="order_payment" class="col-sm-3 col-form-label text-lg-end">Payment: </label>
+                    <div class="col-sm-9">
+                        <select id="order_payment" class="form-select">
+                            <option value="CASH">CASH</option>
+                            <option value="BANK">BANK</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="input-group mb-3">
+                    <label for="order_status" class="col-sm-3 col-form-label text-lg-end">Status: </label>
+                    <div class="col-sm-9">
+                        <select id="order_status" class="form-select">
+                            <option value="completed">Completed</option>
+                            <option value="pending" selected>Pending</option>
+                            <option value="canceled">Canceled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section for adding multiple order items -->
+                <div id="order_items_container">
+                    <h6>Order Items</h6>
+                    <div class="input-group mb-3">
+                        <label class="col-sm-3 col-form-label text-lg-end">Product: </label>
+                        <div class="col-sm-9">
+                            <select class="form-select product-select" onchange="updatePrice(this)">
+                                <option value="">Select a product</option>
+                                <% products.forEach(product => { %>
+                                    <option value="<%= product.id %>" data-price="<%= product.sale_price %>">
+                                        <%= product.product_name %>
+                                    </option>
+                                <% }) %>
+                            </select>
+                            <input type="number" class="form-control" placeholder="Quantity" name="order_product_quantity[]">
+                            <input type="number" class="form-control item-price" placeholder="Price" name="order_product_price[]" readonly>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm mb-3" onclick="addOrderItemRow()">Add Item</button>
+
+            </div><!--end modal-body-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="saveOrder()">Save</button>
+            </div><!--end modal-footer-->
+        </div><!--end modal-content-->
+    </div><!--end modal-dialog-->
+</div>
+
+<%- contentFor('extra_javascript') %>
+<script>
+    // Function to add a new row for an order item
+    function addOrderItemRow() {
+        const itemRow = `
+            <div class="input-group mb-3">
+                <label class="col-sm-3 col-form-label text-lg-end">Product: </label>
+                <div class="col-sm-9">
+                    <select class="form-select product-select" onchange="updatePrice(this)">
+                        <option value="">Select a product</option>
+                        <% products.forEach(product => { %>
+                            <option value="<%= product.id %>" data-price="<%= product.sale_price %>">
+                                <%= product.product_name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                    <input type="number" class="form-control" placeholder="Quantity" name="order_product_quantity[]">
+                    <input type="number" class="form-control item-price" placeholder="Price" name="order_product_price[]" readonly>
+                </div>
+            </div>
+        `;
+        document.getElementById('order_items_container').insertAdjacentHTML('beforeend', itemRow);
+    }
+
+    // Function to update the price field based on the selected product
+    function updatePrice(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const price = selectedOption.getAttribute('data-price');
+
+        // Update the price input in the same row
+        const itemPriceInput = selectElement.closest('.input-group').querySelector('.item-price');
+        itemPriceInput.value = price;
+    }
+
+    function saveOrder() {
+        const customerId = document.getElementById('order_customer').value;
+        const paymentMethod = document.getElementById('order_payment').value; // Now gets value from the dropdown
+        const status = document.getElementById('order_status').value;
+        let totalPrice = 0;
+
+        // Collect order items
+        const orderItems = [];
+        document.querySelectorAll('#order_items_container .input-group').forEach(group => {
+            const productId = group.querySelector('.product-select').value;
+            const quantity = group.querySelector('input[name="order_product_quantity[]"]').value;
+            const price = group.querySelector('input[name="order_product_price[]"]').value;
+
+            if (productId) {
+                orderItems.push({ productId, quantity, price });
+                totalPrice += Number(price) * Number(quantity);
+            }
+        });
+
+        // Send order data to server
+        const orderData = {
+            customerId,
+            paymentMethod, // Send selected payment method
+            status,
+            orderItems,
+            totalPrice
+        };
+
+        fetch('/api/add-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert('Order added successfully!');
+                    window.location.reload(); // Reload the page to refresh the table
+                    $('#addOrderModal').modal('hide');
+
+                }
+            })
+            .catch((error) => {
+                console.error('Error adding order:', error);
+            });
+    }
+
+
+
+    // Select/Deselect all checkboxes
+    document.getElementById('select-all-checkbox').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('.order-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+    // Function to delete selected orders
+    function deleteSelectedOrders() {
+        // Get all selected order IDs
+        const selectedOrderIds = Array.from(document.querySelectorAll('.order-checkbox:checked')).map(checkbox => checkbox.value);
+
+        if (selectedOrderIds.length === 0) {
+            alert('No orders selected for deletion.');
+            return;
+        }
+
+        // Confirm deletion
+        if (!confirm('Are you sure you want to delete the selected orders?')) return;
+
+        // Make API call to delete orders
+        fetch('/api/delete-orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ orderIds: selectedOrderIds })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error deleting orders: ' + data.error);
+                } else {
+                    alert('Selected orders deleted successfully.');
+                    window.location.reload(); // Reload the page to update the order list
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting orders:', error);
+            });
+    }
+</script>
+
+

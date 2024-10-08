@@ -1,0 +1,239 @@
+<%- contentFor('extra_css') %>
+
+<%- contentFor('content') %>
+
+<div class="container-xxl">
+    <div class="row">
+        <div class="col-md-12 col-lg-4">
+            <div class="card">
+                <div class="card-body border-dashed-bottom pb-3">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-auto">
+                            <div class="d-flex justify-content-center align-items-center thumb-xl border border-secondary rounded-circle">
+                                <i class="icofont-money-bag h1 align-self-center mb-0 text-secondary"></i>
+                            </div>
+                            <h5 class="mt-2 mb-0 fs-14">Total Revenue</h5>
+                        </div><!--end col-->
+                        <div class="col align-self-center">
+                            <div id="line-1" class="apex-charts float-end"></div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end card-body-->
+                <div class="card-body">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-12 col-md-6">
+                            <h2 class="fs-22 mt-0 mb-1 fw-bold"><%= totalRevenue.toFixed(2) %> DH</h2>
+
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end card-body-->
+            </div><!--end card-->
+            <div class="card">
+                <div class="card-body border-dashed-bottom pb-3">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-auto">
+                            <div class="d-flex justify-content-center align-items-center thumb-xl border border-secondary rounded-circle">
+                                <i class="icofont-opencart h1 align-self-center mb-0 text-secondary"></i>
+                            </div>
+                            <h5 class="mt-2 mb-0 fs-14">Total Orders</h5>
+                        </div><!--end col-->
+                        <div class="col align-self-center ">
+                            <div id="line-2" class="apex-charts float-end"></div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end card-body-->
+                <div class="card-body">
+                    <div class="row d-flex justify-content-center ">
+                        <div class="col-12 col-md-6">
+                            <h2 class="fs-22 mt-0 mb-1 fw-bold"><%= totalOrders %></h2>
+                        </div><!--end col-->
+                        <div class="col-12 col-md-6 align-self-center text-start text-md-end">
+                            <button type="button" class="btn btn-outline-secondary btn-sm px-2 mt-2 mt-md-0 ">View  Report</button>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end card-body-->
+            </div><!--end card-->
+        </div> <!--end col-->
+        <div class="col-md-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">Monthly Avg. Income</h4>
+                        </div><!--end col-->
+                        <div class="col-auto">
+                            <div class="dropdown">
+                                <a href="#" class="btn bt btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="icofont-calendar fs-5 me-1"></i> This Year<i class="las la-angle-down ms-1"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" href="#">Today</a>
+                                    <a class="dropdown-item" href="#">Last Week</a>
+                                    <a class="dropdown-item" href="#">Last Month</a>
+                                    <a class="dropdown-item" href="#">This Year</a>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                    </div>  <!--end row-->
+                </div><!--end card-header-->
+                <div class="card-body pt-0">
+                    <div id="monthly_income" class="apex-charts"></div>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card shadow-none border mb-3 mb-lg-0">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col text-center">
+                                            <span class="fs-18 fw-semibold">$24,500</span>
+                                            <h6 class="text-uppercase text-muted mt-2 m-0">Today's Revenue</h6>
+                                        </div><!--end col-->
+                                    </div> <!-- end row -->
+                                </div><!--end card-body-->
+                            </div> <!--end card-body-->
+                        </div><!--end col-->
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card shadow-none border mb-3 mb-lg-0">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col text-center">
+                                            <span class="fs-18 fw-semibold">82.8%</span>
+                                            <h6 class="text-uppercase text-muted mt-2 m-0">Conversion Rate</h6>
+                                        </div><!--end col-->
+                                    </div> <!-- end row -->
+                                </div><!--end card-body-->
+                            </div> <!--end card-body-->
+                        </div><!--end col-->
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card shadow-none border mb-3 mb-lg-0">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col text-center">
+                                            <span class="fs-18 fw-semibold">$9982.00</span>
+                                            <h6 class="text-uppercase text-muted mt-2 m-0">Total Expenses</h6>
+                                        </div><!--end col-->
+                                    </div> <!-- end row -->
+                                </div><!--end card-body-->
+                            </div> <!--end card-->
+                        </div><!--end col-->
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card shadow-none border mb-3 mb-lg-0">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col text-center">
+                                            <span class="fs-18 fw-semibold">$80.5</span>
+                                            <h6 class="text-uppercase text-muted mt-2 m-0">Avg. Value</h6>
+                                        </div><!--end col-->
+                                    </div> <!-- end row -->
+                                </div><!--end card-body-->
+                            </div> <!--end card-body-->
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end card-body-->
+            </div><!--end card-->
+        </div> <!--end col-->
+    </div><!--end row-->
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">Popular Products</h4>
+                        </div><!--end col-->
+                        <div class="col-auto">
+                            <div class="dropdown">
+                                <a href="#" class="btn bt btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="icofont-calendar fs-5 me-1"></i> This Year<i class="las la-angle-down ms-1"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" href="#">Today</a>
+                                    <a class="dropdown-item" href="#">Last Week</a>
+                                    <a class="dropdown-item" href="#">Last Month</a>
+                                    <a class="dropdown-item" href="#">This Year</a>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                    </div>  <!--end row-->
+                </div><!--end card-header-->
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="border-top-0">Product</th>
+                                    <th class="border-top-0">Price</th>
+                                    <th class="border-top-0">Sell</th>
+                                    <th class="border-top-0">Stock</th>
+                                </tr><!--end tr-->
+                            </thead>
+                            <tbody>
+                            <% if (popularProducts.length) { %>
+                                <% popularProducts.forEach(product => { %>
+                                    <tr>
+                                        <td><%= product.product_name %></td>
+                                        <td><%= product.sale_price ? Number(product.sale_price).toFixed(2) : '0.00' %> DH</td>
+                                        <td><%= product.total_sold %></td>
+                                        <td><%= product.stock %></td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="text-center">No popular products found.</td>
+                                </tr>
+                            <% } %>
+                            </tbody>
+                        </table> <!--end table-->
+                    </div><!--end /div-->
+                </div><!--end card-body-->
+            </div><!--end card-->
+        </div> <!--end col-->
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">Recent Orders</h4>
+                        </div><!--end col-->
+                    </div>  <!--end row-->
+                </div><!--end card-header-->
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <tbody>
+                            <% if (recentOrders.length) { %>
+                                <% recentOrders.forEach(order => { %>
+                                    <tr class="">
+                                        <td class="px-0">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 text-truncate">
+                                                    <h6 class="m-0 text-truncate"><%= order.customer_name %></h6>
+                                                    <a href="#" class="font-12 text-muted text-decoration-underline">Order #<%= order.order_id %></a>
+                                                </div><!--end media body-->
+                                            </div><!--end media-->
+                                        </td>
+                                        <td class="px-0 text-end">
+                                            <span class="text-primary ps-2 align-self-center text-end"><%= Number(order.total_price).toFixed(2) %> DH</span>
+                                        </td>
+                                    </tr><!--end tr-->
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="2" class="text-center">No recent orders found.</td>
+                                </tr>
+                            <% } %>
+                            </tbody>
+                        </table> <!--end table-->
+                    </div><!--end /div-->
+                </div><!--end card-body-->
+            </div><!--end card-->
+        </div> <!--end col-->
+    </div><!--end row-->
+
+
+</div><!-- container -->
+
+<%- contentFor('extra_javascript') %>
+<script src="/libs/apexcharts/apexcharts.min.js"></script>
+<script src="/js/pages/ecommerce-index.init.js"></script>

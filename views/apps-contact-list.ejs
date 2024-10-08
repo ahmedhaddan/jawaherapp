@@ -1,0 +1,276 @@
+<%- contentFor('extra_css') %>
+<link href="/libs/simple-datatables/style.css" rel="stylesheet" type="text/css" />
+
+<%- contentFor('content') %>
+<div class="container-xxl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">Contacts</h4>
+                        </div><!--end col-->
+                        <div class="col-auto">
+                            <form class="row g-2">
+                                <div class="col-auto">
+                                    <a class="btn bg-primary-subtle text-primary dropdown-toggle d-flex align-items-center arrow-none"
+                                        data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
+                                        aria-expanded="false" data-bs-auto-close="outside">
+                                        <i class="iconoir-filter-alt me-1"></i> Filter
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-start">
+                                        <div class="p-2">
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked
+                                                    id="filter-all">
+                                                <label class="form-check-label" for="filter-all">
+                                                    All
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked
+                                                    id="filter-one">
+                                                <label class="form-check-label" for="filter-one">
+                                                    New
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked
+                                                    id="filter-two">
+                                                <label class="form-check-label" for="filter-two">
+                                                    Active
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" checked
+                                                    id="filter-three">
+                                                <label class="form-check-label" for="filter-three">
+                                                    Inactive
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#addBoard"><i class="fa-solid fa-plus me-1"></i> Add
+                                        Contact</button>
+                                    <!-- Delete Button for selected contacts -->
+                                    <button type="button" class="btn btn-danger" id="deleteSelectedContacts">
+                                        <i class="fa-solid fa-trash me-1"></i> Delete Selected
+                                    </button>
+                                </div><!--end col-->
+                            </form>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end card-header-->
+                <div class="card-body pt-0">
+                    <table class="table mb-0 checkbox-all text-nowrap" id="datatable_1">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 16px;">
+                                    <div class="form-check mb-0 ms-n1">
+                                        <input type="checkbox" class="form-check-input" name="select-all"
+                                            id="select-all">
+                                    </div>
+                                </th>
+                                <th class="ps-0">Vendor</th>
+                                <th>Email</th>
+                                <th>Phone No</th>
+                                <th>Adress</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <% if (contacts.length) { %>
+                            <% contacts.forEach(contact => { %>
+                                <tr>
+                                    <td>
+                                        <div class="form-check mb-0 ms-n1">
+                                            <input type="checkbox" class="form-check-input" name="select-contact" value="<%= contact.id %>">
+                                        </div>
+                                    </td>
+                                    <td><%= contact.vendor_name %></td>
+                                    <td><%= contact.vendor_email %></td>
+                                    <td><%= contact.vendor_phone %></td>
+                                    <td><%= contact.vendor_address %></td>
+                                    <td><%= contact.vendor_note %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6" class="text-center">No contacts found.</td>
+                            </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div><!-- container -->
+<!-- Modal for adding a new contact -->
+<div class="modal fade" id="addBoard" tabindex="-1" role="dialog" aria-labelledby="addBoardTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBoardTitle">Add New Contact</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#addBoard" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addContactForm">
+                    <!-- Vendor Name -->
+                    <div class="input-group mb-3">
+                        <label for="vendor_name" class="col-sm-3 col-form-label text-lg-end">Vendor Name:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="vendor_name" placeholder="Enter vendor name" required>
+                        </div>
+                    </div>
+                    <!-- Email -->
+                    <div class="input-group mb-3">
+                        <label for="vendor_email" class="col-sm-3 col-form-label text-lg-end">Email:</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" id="vendor_email" placeholder="Enter vendor email" required>
+                        </div>
+                    </div>
+                    <!-- Phone Number -->
+                    <div class="input-group mb-3">
+                        <label for="vendor_phone" class="col-sm-3 col-form-label text-lg-end">Phone No:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="vendor_phone" placeholder="Enter phone number" required>
+                        </div>
+                    </div>
+                    <!-- Address -->
+                    <div class="input-group mb-3">
+                        <label for="vendor_address" class="col-sm-3 col-form-label text-lg-end">Address:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="vendor_address" placeholder="Enter address">
+                        </div>
+                    </div>
+                    <!-- Note -->
+                    <div class="input-group mb-3">
+                        <label for="vendor_note" class="col-sm-3 col-form-label text-lg-end">Note:</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="vendor_note" placeholder="Enter any note" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="saveContact()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<%- contentFor('extra_javascript') %>
+<script src="/libs/simple-datatables/umd/simple-datatables.js"></script>
+<script src="/js/pages/datatable.init.js"></script>
+<script>
+    function saveContact() {
+        const vendorName = document.getElementById('vendor_name').value;
+        const vendorEmail = document.getElementById('vendor_email').value;
+        const vendorPhone = document.getElementById('vendor_phone').value;
+        const vendorAddress = document.getElementById('vendor_address').value;
+        const vendorNote = document.getElementById('vendor_note').value;
+
+        // Validate inputs
+        if (!vendorName || !vendorEmail || !vendorPhone) {
+            alert('Please fill all required fields correctly.');
+            return;
+        }
+
+        const contactData = {
+            vendor_name: vendorName,
+            vendor_email: vendorEmail,
+            vendor_phone: vendorPhone,
+            vendor_address: vendorAddress,
+            vendor_note: vendorNote,
+        };
+
+        // Send data to the server
+        fetch('/api/add-contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(contactData),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert('Contact added successfully!');
+                    window.location.reload(); // Reload the page to refresh the table
+                  //  $('#addBoard').modal('hide');
+
+                }
+            })
+            .catch((error) => {
+                console.error('Error adding contact:', error);
+            });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const contactTable = document.querySelector('#datatable_1');
+        if (contactTable) {
+            new simpleDatatables.DataTable(contactTable);
+        }
+
+        // "Select All" checkbox functionality
+        const selectAllCheckbox = document.querySelector('#select-all');
+        const contactCheckboxes = document.querySelectorAll('input[name="select-contact"]');
+
+        selectAllCheckbox.addEventListener('change', function () {
+            contactCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+
+        // Ensure "Select All" is correctly checked/unchecked when individual checkboxes change
+        contactCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                if (!checkbox.checked) {
+                    selectAllCheckbox.checked = false;
+                } else if ([...contactCheckboxes].every(c => c.checked)) {
+                    selectAllCheckbox.checked = true;
+                }
+            });
+        });
+    });
+
+    function deleteSelectedContacts() {
+        const selectedIds = [...document.querySelectorAll('input[name="select-contact"]:checked')].map(checkbox => checkbox.value);
+
+        if (selectedIds.length === 0) {
+            alert('Please select at least one contact to delete.');
+            return;
+        }
+
+        if (confirm('Are you sure you want to delete the selected contacts?')) {
+            fetch('/api/delete-contacts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: selectedIds })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error deleting contacts: ' + data.error);
+                    } else {
+                        alert('Selected contacts deleted successfully!');
+                        window.location.reload(); // Reload the page to refresh the table
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting contacts:', error);
+                });
+        }
+    }
+
+    document.getElementById('deleteSelectedContacts').addEventListener('click', deleteSelectedContacts);
+</script>

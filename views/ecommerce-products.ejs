@@ -1,0 +1,565 @@
+<%- contentFor('extra_css') %>
+<link href="/libs/simple-datatables/style.css" rel="stylesheet" type="text/css"/>
+
+<link href="/libs/uppy/uppy.min.css" rel="stylesheet" type="text/css"/>
+<%- contentFor('content') %>
+
+
+<div class="container-xxl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">Products</h4>
+                        </div><!--end col-->
+                        <div class="col-auto">
+                            <form class="row g-2">
+                                <div class="col-auto">
+                                    <a class="btn bg-primary-subtle text-primary dropdown-toggle d-flex align-items-center arrow-none"
+                                       data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
+                                       aria-expanded="false" data-bs-auto-close="outside">
+                                        <i class="iconoir-filter-alt me-1"></i> Filter
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-start">
+                                        <div class="p-2">
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-all">
+                                                <label class="form-check-label" for="filter-all">
+                                                    All
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-one">
+                                                <label class="form-check-label" for="filter-one">
+                                                    Fashion
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-two">
+                                                <label class="form-check-label" for="filter-two">
+                                                    Plants
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked
+                                                       id="filter-three">
+                                                <label class="form-check-label" for="filter-three">
+                                                    Toys
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked
+                                                       id="filter-four">
+                                                <label class="form-check-label" for="filter-four">
+                                                    Gadgets
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" class="form-check-input" checked
+                                                       id="filter-five">
+                                                <label class="form-check-label" for="filter-five">
+                                                    Food
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" checked id="filter-six">
+                                                <label class="form-check-label" for="filter-six">
+                                                    Drinks
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModalScrollable"><i
+                                                class="fa-solid fa-plus me-1"></i> Add Product
+                                    </button>
+
+                                    <!-- New Delete Button -->
+                                    <button type="button" class="btn btn-danger" id="delete-selected">
+                                        <i class="fa-solid fa-trash me-1"></i> Delete Selected
+                                    </button>
+                                </div><!--end col-->
+                            </form>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end card-header-->
+                <div class="card-body pt-0">
+
+                    <div class="table-responsive">
+                        <table class="table mb-0 checkbox-all text-nowrap" id="datatable_1">
+                            <thead class="table-light">
+                            <tr>
+                                <th style="width: 16px;">
+                                    <div class="form-check mb-0 ms-n1">
+                                        <input type="checkbox" class="form-check-input" name="select-all"
+                                               id="select-all">
+                                    </div>
+                                </th>
+                                <th class="ps-0">Product Name</th>
+                                <th>Price</th>
+                                <th>Sale Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Categories</th>
+                                <th>Published</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% if (products.length) { %>
+                                <% products.forEach(product => { %>
+                                    <tr id="product-row-<%= product.id %>">
+                                        <td style="width: 16px;">
+                                            <div class="form-check mb-0 ms-n1">
+                                                <input type="checkbox" class="form-check-input select-product-checkbox" name="select-product" value="<%= product.id %>">
+
+                                            </div>
+                                        </td>
+                                        <td class="ps-0">
+                                            <img src="/images/products/04.png" alt="" height="40">
+                                            <p class="d-inline-block align-middle mb-0">
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit-modal-xl"
+                                                   class="d-inline-block align-middle mb-0 product-name"
+                                                   data-id="<%= product.id %>"
+                                                   data-product-name="<%= product.product_name %>"
+                                                   data-price="<%= product.price %>"
+                                                   data-sale-price="<%= product.sale_price %>"
+                                                   data-stock="<%= product.stock %>"
+                                                   data-tags="<%= product.tags %>">
+                                                    <%= product.product_name %>
+                                                </a>
+                                            </p>
+                                        </td>
+                                        <td class="product-price"><%= product.price %></td>
+                                        <td class="product-sale-price"><%= product.sale_price %></td>
+                                        <td class="product-stock"><%= product.stock %></td>
+                                        <td>
+                                            <% if (product.status === 'available') { %>
+                                                <span class="badge bg-success-subtle text-success">Available</span>
+                                            <% } else if (product.status === 'out_of_stock') { %>
+                                                <span class="badge bg-danger text-white">Out of Stock</span>
+                                            <% } %>
+                                        </td>
+                                        <td><%= product.tag_name %></td>
+
+                                        <td>
+                                            <div class="form-check form-switch form-switch-success">
+                                                <input class="form-check-input" type="checkbox" id="customSwitchSuccess"
+                                                       checked>
+                                            </div>
+                                        </td>
+                                        <td><%= product.created_at %></td>
+                                        <td><%= product.updated_at %></td>
+
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="9" class="text-center">No products found.</td>
+                                </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div>
+<!-- modal for create new product -->
+<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title m-0" id="exampleModalScrollableTitle">Center Modal</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div><!--end modal-header-->
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <label for="example-text-input" class="col-sm-3 col-form-label text-lg-end">Product Name
+                        : </label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" value="" id="product_name">
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label for="example-text-input" class="col-sm-3 col-form-label text-lg-end">Price : </label>
+
+                    <span class="input-group-text">MAD</span>
+                    <input type="text" class="form-control" id="price" aria-label="">
+                    <span class="input-group-text">.00</span>
+                </div>
+                <div class="input-group mb-3">
+                    <label for="example-text-input" class="col-sm-3 col-form-label text-lg-end">Sale Price
+                        : </label>
+                    <span class="input-group-text">MAD</span>
+                    <input type="text" class="form-control" id="sale-price" aria-label="">
+                    <span class="input-group-text">.00</span>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label for="example-text-input" class="col-sm-3 col-form-label text-lg-end">Stock : </label>
+                    <button class="btn btn-primary"
+                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-
+                    </button>
+                    <input type="number" class="form-control" min="0" name="quantity" id="stock" value="0"
+                           style="pointer-events: none;">
+                    <button class="btn btn-primary"
+                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+
+                    </button>
+                </div>
+                <div class="input-group mb-3">
+                    <label for="example-text-input" class="col-sm-3 col-form-label text-lg-end">Category
+                        : </label>
+                    <select class="form-select" aria-label="Default select example" id="taggableSelect">
+                        <option value="">Select a tag</option>
+                    </select>
+                </div>
+<!--                <div class="input-group mb-3">-->
+<!--                    <label for="product_image" class="col-sm-3 col-form-label text-lg-end">Product Image: </label>-->
+<!--                    <div class="col-sm-9">-->
+<!--                        <input type="file" id="product_image" name="product_image" accept="image/*">-->
+
+<!--                    </div>-->
+<!--                </div>-->
+            </div><!--end modal-body-->
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="saveProduct()">Save</button>
+            </div><!--end modal-footer-->
+        </div><!--end modal-content-->
+    </div><!--end modal-dialog-->
+</div>
+
+
+<!-- modal for EDIT  product -->
+<div class="modal fade bd-example-modal-xl" id="edit-modal-xl" tabindex="-1" role="dialog"
+     aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title m-0" id="myExtraLargeModalLabel">Edit Product</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div><!--end modal-header-->
+            <div class="modal-body">
+                <input type="hidden" id="edit_product_id"> <!-- Hidden field for product ID -->
+                <div class="row">
+                    <div class="col-md-5">
+                        <img src="" alt="Product Image" class="img-fluid" style="max-height: 400px;">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="mb-3">
+                            <label for="edit_product_name" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="edit_product_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_price" class="form-label">Price</label>
+                            <input type="text" class="form-control" id="edit_price">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_sale-price" class="form-label">Sale Price</label>
+                            <input type="text" class="form-control" id="edit_sale-price">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_stock" class="form-label">Stock</label>
+                            <input type="text" class="form-control" id="edit_stock">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_taggableSelect" class="form-label">Tags</label>
+                            <select class="form-select" id="edit_taggableSelect"></select>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end modal-body-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" id="save-changes">Save changes</button>
+            </div><!--end modal-footer-->
+        </div><!--end modal-content-->
+    </div><!--end modal-dialog-->
+</div><!--end modal-->
+
+
+
+
+
+
+
+
+<%- contentFor('extra_javascript') %>
+<script src="/libs/simple-datatables/umd/simple-datatables.js"></script>
+<script src="/js/pages/datatable.init.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // function saveProduct() {
+    //     const productName = document.getElementById('product_name').value;
+    //     const price = document.getElementById('price').value;
+    //     const salePrice = document.getElementById('sale-price').value;
+    //     const stock = document.getElementById('stock').value;
+    //     const tags = $('#taggableSelect').val();
+    //     const productImage = document.getElementById('product_image').files[0];
+    //
+    //
+    //     console.log('productImage', productImage)
+    //         // If no image is uploaded, just send the text data
+    //         const productData = {
+    //             product_name: productName,
+    //             price: price,
+    //             sale_price: salePrice,
+    //             stock: stock,
+    //             tags: tags,
+    //         };
+    //
+    //         sendProductData(productData);
+    //
+    // }
+
+    function saveProduct() {
+        const productName = document.getElementById('product_name').value;
+        const price = document.getElementById('price').value;
+        const salePrice = document.getElementById('sale-price').value;
+        const stock = document.getElementById('stock').value;
+        const tags = $('#taggableSelect').val();
+       // const productImage = document.getElementById('product_image').files[0];
+
+        // First, send product details to server without the image
+        const productData = {
+            product_name: productName,
+            price: price,
+            sale_price: salePrice,
+            stock: stock,
+            tags: tags
+        };
+
+        // Send product data to server
+        fetch('/api/add-product-details', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    // If product details are saved successfully, upload the image
+                    if (productImage) {
+                    //    uploadProductImage(productImage, data.productId); // Upload image with productId
+                    } else {
+                        alert('Product saved successfully without image.');
+                        $('#exampleModalScrollable').modal('hide');
+                        window.location.reload();
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    // function uploadProductImage(image, productId) {
+    //     const formData = new FormData();
+    //     formData.append('product_image', image);
+    //     formData.append('product_id', productId);
+    //
+    //     for (let pair of formData.entries()) {
+    //         console.log(pair[0] + ': ' + pair[1]); // Logs key-value pairs
+    //     }
+    //
+    //     // Upload image to server
+    //     fetch('/api/upload-product-image', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data',
+    //         },
+    //         body: formData
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.error) {
+    //                 alert(data.error);
+    //             } else {
+    //                 console.log('Image uploaded successfully:', data);
+    //                 alert('Product and image saved successfully!');
+    //                 $('#exampleModalScrollable').modal('hide');
+    //                 window.location.reload();
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error uploading image:', error);
+    //         });
+    // }
+
+    // Function to send the product data to server
+    // function sendProductData(productData) {
+    //
+    //     fetch('/api/add-product', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(productData) // Send product data as JSON
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 return response.text().then(text => {
+    //                     throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
+    //                 });
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             console.log('Success:', data);
+    //             // Close the modal and reload the page
+    //             $('#exampleModalScrollable').modal('hide');
+    //             window.location.reload();
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error:', error);
+    //         });
+    // }
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/tags') // Adjust the URL if necessary
+            .then(response => response.json())
+            .then(data => {
+                const selectElement = document.querySelector('.form-select');
+                console.log('data', data)
+                data.forEach(tag => {
+                    const option = document.createElement('option');
+                    option.value = tag.id; // Use the tag id as the value
+                    option.textContent = tag.tag_name; // Use the tag name as the display text
+                    selectElement.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching tags:', error);
+            });
+    });
+
+
+    // Event listener for product name links to open edit modal
+    document.querySelectorAll('.product-name').forEach(link => {
+        link.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            const productName = this.getAttribute('data-product-name');
+            const price = this.getAttribute('data-price');
+            const salePrice = this.getAttribute('data-sale-price');
+            const stock = this.getAttribute('data-stock');
+            const tags = this.getAttribute('data-tags').split(',');
+
+            document.getElementById('edit_product_id').value = productId;
+            document.getElementById('edit_product_name').value = productName;
+            document.getElementById('edit_price').value = price;
+            document.getElementById('edit_sale-price').value = salePrice;
+            document.getElementById('edit_stock').value = stock;
+
+            const tagSelect = document.getElementById('edit_taggableSelect');
+            tagSelect.innerHTML = '';
+            tags.forEach(tag => {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagSelect.appendChild(option);
+            });
+        });
+    });
+
+    // Save changes button to update product
+    document.getElementById('save-changes').addEventListener('click', function() {
+        const productId = document.getElementById('edit_product_id').value;
+        const productName = document.getElementById('edit_product_name').value;
+        const price = document.getElementById('edit_price').value;
+        const salePrice = document.getElementById('edit_sale-price').value;
+        const stock = document.getElementById('edit_stock').value;
+        const tags = $('#edit_taggableSelect').val();
+
+        const productData = { id: productId, product_name: productName, price, sale_price: salePrice, stock, tags };
+
+        fetch('/api/update-product', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    // Update product row in table
+                    const productRow = document.getElementById(`product-row-${productId}`);
+                    productRow.querySelector('.product-name').textContent = productName;
+                    productRow.querySelector('.product-price').textContent = price;
+                    productRow.querySelector('.product-sale-price').textContent = salePrice;
+                    productRow.querySelector('.product-stock').textContent = stock;
+
+                    // Close modal
+                    $('#edit-modal-xl').modal('hide');
+
+                }
+            })
+            .catch(error => console.error('Error updating product:', error));
+    });
+
+
+    /////Delete button
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Delete button event listener
+        document.getElementById('delete-selected').addEventListener('click', function() {
+            // Get all checked checkboxes
+            const checkedCheckboxes = document.querySelectorAll('.select-product-checkbox:checked');
+            const productIds = Array.from(checkedCheckboxes).map(checkbox => checkbox.value);
+
+            if (productIds.length === 0) {
+                alert('Please select at least one product to delete.');
+                return;
+            }
+
+            // Confirm deletion
+            const confirmDelete = confirm('Are you sure you want to delete the selected products?');
+            if (!confirmDelete) return;
+
+            // Send a request to the server to delete the selected products
+            fetch('/api/delete-products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: productIds })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        // Remove the deleted product rows from the table
+                        productIds.forEach(id => {
+                            const productRow = document.getElementById(`product-row-${id}`);
+                            if (productRow) productRow.remove();
+                        });
+                        alert('Selected products deleted successfully.');
+                        window.location.reload();
+                    }
+                })
+                .catch(error => console.error('Error deleting products:', error));
+        });
+    });
+
+
+
+
+
+</script>
