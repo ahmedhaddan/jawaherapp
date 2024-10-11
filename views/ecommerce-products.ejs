@@ -355,14 +355,14 @@
                 if (data.error) {
                     alert(data.error);
                 } else {
-                    // If product details are saved successfully, upload the image
-                    if (productImage) {
-                    //    uploadProductImage(productImage, data.productId); // Upload image with productId
-                    } else {
+                    // // If product details are saved successfully, upload the image
+                    // if (productImage) {
+                    // //    uploadProductImage(productImage, data.productId); // Upload image with productId
+                    // } else {
                         alert('Product saved successfully without image.');
                         $('#exampleModalScrollable').modal('hide');
                         window.location.reload();
-                    }
+                   // }
                 }
             })
             .catch((error) => {
