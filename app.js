@@ -53,4 +53,4 @@ app.use((err, req, res, next) => {
 });
 
 const http = require("http").createServer(app);
-http.listen(process.env.PORT ?? 8001, () => console.log(`Server is listening on address http://localhost:${process.env.PORT ?? 8001}/`));
+http.listen(process.env.PORT ?? 8001, () => console.log(`Server is listening on address http://localhost:${process.env.PORT}/`));
